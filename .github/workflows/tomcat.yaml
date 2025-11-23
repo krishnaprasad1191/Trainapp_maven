@@ -1,34 +1,27 @@
-name:  CI/CD pipelie to deploy to tomcat
-on:
+name: CICD for Java application using maven
+
+on: 
   push:
-    branches: master
+    branches: ['main']
+
 jobs:
-   build-deploy:
-     runs-on: ubuntu-latest
-     steps:
-       - name: checkout code
-         uses: actions/checkout@v3
-       - name: setup-jdk 
-         uses: actions/setup-java@v3
-         with:
-          distribution: 'temurin'
-          java-version: '17'   # Updated Java version
-       - name: maven validate
-         run: mvn validate
-       - name: maven compile
-         run: mvn compile
-       - name: maven test
-         run: mvn test
-       - name: maven package
-         run: mvn package
-       - name: sonar code quality 
-         run: |
-          mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=train-ticket \
-            -Dsonar.host.url="${{ secrets.SONAR_HOST }}" \
-            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
-
-      
-         
-    
-
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+# Setup java and getting code----------------------------------------------------
+      - name: Code checkout
+        uses: actions/checkout@v3
+      - name: Java Setup
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+# Maven Build Starts--------------------------------------------------------------
+      - name: Maven Validation
+        run: mvn validate
+      - name: Maven Compile
+        run: mvn compile
+      - name: Maven test
+        run: mvn test
+      - name: Maven Package
+        run: mvn package 
