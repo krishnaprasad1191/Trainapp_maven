@@ -17,11 +17,20 @@ jobs:
           distribution: temurin
           java-version: 17
 # Maven Build Starts--------------------------------------------------------------
-      - name: Maven Validation
-        run: mvn validate
-      - name: Maven Compile
-        run: mvn compile
-      - name: Maven test
-        run: mvn test
-      - name: Maven Package
-        run: mvn package 
+      # - name: Maven Validation
+      #   run: mvn validate
+      # - name: Maven Compile
+      #   run: mvn compile
+      # - name: Maven test
+      #   run: mvn test
+      # - name: Maven Package
+      #   run: mvn package 
+
+      - name: Maven package (.war file creation)
+        run: mvn clean package
+
+      - name: Deploy artifact on Tomcat
+        run: |
+          curl -v -u ${{secrets.TOMCAT_USER}}:${{secrets.TOMCAT_PASSWORD}} \
+          --upload-file target/*.war \
+          http://${{secrets.TOMCAT_SERVER}}:8080/manager/text/deploy?path=/trainapp&update=true
