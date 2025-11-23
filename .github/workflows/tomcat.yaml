@@ -33,4 +33,4 @@ jobs:
         run: |
           curl -v -u ${{secrets.TOMCAT_USER}}:${{secrets.TOMCAT_PASSWORD}} \
           --upload-file target/*.war \
-          http://${{secrets.TOMCAT_SERVER}}:8080/manager/text/deploy?path=/kp&update=true
+          http://${{secrets.TOMCAT_SERVER}}:8080/manager/text/undeploy?path=/kp&update=true
