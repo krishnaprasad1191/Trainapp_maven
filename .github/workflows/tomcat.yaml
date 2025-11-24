@@ -25,6 +25,14 @@ jobs:
       #   run: mvn test
       # - name: Maven Package
       #   run: mvn package 
+      - name: Sonarqube code analysis
+        env:
+          token: ${{secrets.SONARQUBE_TOKEN}}
+        run: mvn sonar:sonar \
+          -Dsonar.projectKey=trainapp \
+          -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
+          -Dsonar.login=${token}
+
 
       - name: Maven package (.war file creation)
         run: mvn clean package
