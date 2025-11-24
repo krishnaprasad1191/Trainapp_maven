@@ -19,8 +19,8 @@ jobs:
 # Maven Build Starts--------------------------------------------------------------
       # - name: Maven Validation
       #   run: mvn validate
-      # - name: Maven Compile
-      #   run: mvn compile
+      - name: Maven Compile
+        run: mvn clean compile
       # - name: Maven test
       #   run: mvn test
       # - name: Maven Package
