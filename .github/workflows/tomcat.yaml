@@ -1,5 +1,4 @@
 name: CICD for Java application using maven
-
 on: 
   push:
     branches: ['main']
@@ -45,4 +44,25 @@ jobs:
         with:
           name: webapps
           path: target/*.war
+# Dev Env
+  development:
+    name: Deploying Application on Dev Environment
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy in Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.DEV_SERVER}}"
+          App_Env="development"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
   
