@@ -101,8 +101,8 @@ jobs:
           name: webapps
       - name: Deploy on Pre_Production Server
         run: |
-          User="${{secrets.TOMCAT_USER}}"
-          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          User="${{secrets.PREPROD_USER}}"
+          Pass="${{secrets.PREPROD_PASS}}"
           Server="${{secrets.PRE_PROD}}"
           App_Env="preprod"
 
