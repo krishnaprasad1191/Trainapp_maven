@@ -101,10 +101,10 @@ jobs:
           name: webapps
       - name: Deploy on Pre_Production Server
         run: |
-          User="${{secrets.PREPROD_USER}}"
-          Pass="${{secrets.PREPROD_PASS}}"
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
           Server="${{secrets.PRE_PROD}}"
-          App_Env="preprod"
+          App_Env="kp"
 
           curl -v -u "$User:$Pass" \
           --upload-file *.war \
