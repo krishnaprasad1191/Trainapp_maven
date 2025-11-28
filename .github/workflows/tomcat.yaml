@@ -5,8 +5,7 @@ on:
     branches: ['main']
 
 jobs:
-  name: Building Java application
-  build: 
+  Building an Java application: 
     runs-on: ubuntu-latest
     steps:
 # Setup java and getting code----------------------------------------------------
