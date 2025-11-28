@@ -69,7 +69,7 @@ jobs:
 # Test Env
   test_env:
     name: Deploying Application on Test Environment
-    needs: build
+    needs: development
     runs-on: ubuntu-latest
     environment: Test
     steps:
@@ -91,7 +91,7 @@ jobs:
 # Pre_Production Env
   pre_prod:
     name: Deploying Application on Pre_Production Environment
-    needs: build
+    needs: test_env
     runs-on: ubuntu-latest
     environment: pre_prod
     steps:
@@ -113,7 +113,7 @@ jobs:
 # Production Env
   production:
     name: Deploying Application on Production Environment
-    needs: build
+    needs: pre_prod
     runs-on: ubuntu-latest
     environment: production
     steps:
