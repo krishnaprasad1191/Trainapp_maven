@@ -91,7 +91,7 @@ jobs:
 # Pre_Production Env
   preprod:
     name: Deploying Application on Pre_Production Environment
-    needs: development
+    needs: test
     runs-on: ubuntu-latest
     environment: preprod
     steps:
@@ -113,7 +113,7 @@ jobs:
 # Production Env
   production:
     name: Deploying Application on Production Environment
-    needs: test
+    needs: preprod
     runs-on: ubuntu-latest
     environment: production
     steps:
