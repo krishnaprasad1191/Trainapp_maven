@@ -16,30 +16,32 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+
 # Maven Build Starts--------------------------------------------------------------
       # - name: Maven Validation
       #   run: mvn validate
-      - name: Maven Compile
-        run: mvn clean compile
+      # - name: Maven Compile
+      #   run: mvn clean compile
       # - name: Maven test
       #   run: mvn test
-      # - name: Maven Package
-      #   run: mvn package 
-      - name: Sonarqube code analysis
-        env:
-          token: ${{secrets.SONARQUBE_TOKEN}}
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=trainapp \
-            -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
-            -Dsonar.login=${token}
+
+#SonarQube------------------------------------------------------------------------
+      # - name: Sonarqube code analysis
+      #   env:
+      #     token: ${{secrets.SONARQUBE_TOKEN}}
+      #   run: |
+      #     mvn sonar:sonar \
+      #       -Dsonar.projectKey=trainapp \
+      #       -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
+      #       -Dsonar.login=${token}
 
 
       - name: Maven package (.war file creation)
         run: mvn clean package
 
-      - name: Deploy artifact on Tomcat
-        run: |
-          curl -v -u ${{secrets.TOMCAT_USER}}:${{secrets.TOMCAT_PASSWORD}} \
-          --upload-file target/*.war \
-          http://${{secrets.TOMCAT_SERVER}}:8080/manager/text/undeploy?path=/kp&update=true
+      - name: Store Artifact in Github storage
+        uses: actions/upload-artifact@v3
+        with:
+          name: webapps
+          path: target/*.war
+  
