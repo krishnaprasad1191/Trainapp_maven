@@ -67,7 +67,7 @@ jobs:
           "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
 
 # Test Env
-  test_env:
+  test:
     name: Deploying Application on Test Environment
     needs: development
     runs-on: ubuntu-latest
