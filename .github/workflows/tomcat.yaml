@@ -65,4 +65,70 @@ jobs:
           curl -v -u "$User:$Pass" \
           --upload-file *.war \
           "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Test Env
+  test_env:
+    name: Deploying Application on Test Environment
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Test
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Test Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.TEST}}"
+          App_Env="test"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Pre_Production Env
+  pre_prod:
+    name: Deploying Application on Pre_Production Environment
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pre_prod
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Pre_Production Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.PRE_PROD}}"
+          App_Env="preprod"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Production Env
+  production:
+    name: Deploying Application on Production Environment
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Production Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.PROD}}"
+          App_Env="prod"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://$Server:8080/manager/text/deploy?path=/$App_Env&update=true"
   
