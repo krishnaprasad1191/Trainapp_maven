@@ -5,6 +5,7 @@ on:
     branches: ['main']
 
 jobs:
+  name: Building Java application
   build: 
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +41,7 @@ jobs:
         run: mvn clean package
 
       - name: Store Artifact in Github storage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: webapps
           path: target/*.war

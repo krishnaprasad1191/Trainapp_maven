@@ -6,6 +6,7 @@ on:
       - main   # change if needed
 
 jobs:
+    
   build:
     name: Build Java App
     runs-on: ubuntu-latest
