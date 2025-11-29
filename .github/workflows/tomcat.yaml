@@ -35,10 +35,11 @@ jobs:
       #       -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
       #       -Dsonar.login=${token}
 
-      - name: Install Snyk
-        uses: snyk/actions/setup@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Install Snyk CLI
+        run: |
+          curl -s https://static.snyk.io/cli/latest/snyk-linux -o snyk
+          chmod +x snyk
+          sudo mv snyk /usr/local/bin/
 
       - name: Snyk Integration
         uses: snyk/actions/maven@master
