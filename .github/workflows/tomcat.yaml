@@ -41,12 +41,11 @@ jobs:
           chmod +x snyk
           sudo mv snyk /usr/local/bin/
 
-      - name: Snyk Integration
-        uses: snyk/actions/maven@master
-        with:
-          command: test
+      - name: Snyk Security Scan
+        run: snyk test --severity-threshold=medium
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+ 
 
       - name: Maven package (.war file creation)
         run: mvn clean package
