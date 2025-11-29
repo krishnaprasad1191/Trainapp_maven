@@ -35,6 +35,10 @@ jobs:
       #       -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
       #       -Dsonar.login=${token}
 
+      - name: Install Snyk
+        uses: snyk/actions/setup@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk Integration
         uses: snyk/actions/maven@master
