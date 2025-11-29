@@ -42,7 +42,8 @@ jobs:
           sudo mv snyk /usr/local/bin/
 
       - name: Snyk Security Scan
-        run: snyk test --severity-threshold=high || true
+        # run: snyk test --severity-threshold=high || true
+        run: synk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
