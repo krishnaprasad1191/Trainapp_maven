@@ -20,8 +20,8 @@ jobs:
 # Maven Build Starts--------------------------------------------------------------
       # - name: Maven Validation
       #   run: mvn validate
-      # - name: Maven Compile
-      #   run: mvn clean compile
+      - name: Maven Compile
+        run: mvn clean compile
       # - name: Maven test
       #   run: mvn test
 
@@ -35,6 +35,13 @@ jobs:
       #       -Dsonar.host.url=${{secrets.SONARQUBE_URL}} \
       #       -Dsonar.login=${token}
 
+
+      - name: Snyk Integration
+        uses: snyk/actions/maven@master
+        with:
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  
 
       - name: Maven package (.war file creation)
         run: mvn clean package
