@@ -1,0 +1,121 @@
+name: Deploying Java Application on multiple Environments
+on: 
+  push:
+    branches: ['main']
+
+jobs:
+  build:
+    name: Building an Java application
+    runs-on: ubuntu-latest
+    
+    steps:
+
+# Setup java and getting code
+      - name: Code checkout
+        uses: actions/checkout@v3
+      - name: Java Setup
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+# Maven Build and Generating Artifact     
+      - name: Maven package
+        run: mvn clean package
+
+# Storing Artifact on Github
+      - name: Store Artifact in Github storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: webapps
+          path: target/*.war
+
+# Dev Env--------------------------------------------------------------------------------------------------------------------------------------
+  development:
+    name: Deploying Application on Dev Environment
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy in Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.DEV_SERVER}}"
+          App_Env="development"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://13.219.225.72:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Test Env------------------------------------------------------------------------------------------------------------------------------------
+  test:
+    name: Deploying Application on Test Environment
+    needs: development
+    runs-on: ubuntu-latest
+    environment: Test
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Test Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          App_Env="test"
+          Server="${{secrets.TEST}}"
+          
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://3.83.90.183:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Pre_Production Env----------------------------------------------------------------------------------------------------------------------------
+  preprod:
+    name: Deploying Application on Pre_Production Environment
+    needs: test
+    runs-on: ubuntu-latest
+    environment: preprod
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Pre_Production Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.PRE_PROD}}"
+          App_Env="kp"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://3.88.135.119:8080/manager/text/deploy?path=/$App_Env&update=true"
+
+# Production Env--------------------------------------------------------------------------------------------------------------------------------
+  production:
+    name: Deploying Application on Production Environment
+    needs: preprod
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download the Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webapps
+      - name: Deploy on Production Server
+        run: |
+          User="${{secrets.TOMCAT_USER}}"
+          Pass="${{secrets.TOMCAT_PASSWORD}}"
+          Server="${{secrets.PROD}}"
+          App_Env="prod"
+
+          curl -v -u "$User:$Pass" \
+          --upload-file *.war \
+          "http://18.233.165.159:8080/manager/text/deploy?path=/$App_Env&update=true"
+  
